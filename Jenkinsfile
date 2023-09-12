@@ -4,9 +4,6 @@ pipeline {
       label 'node1'
     }
   }
-  triggers {
-    pollscm '*/5 * * * *'
-  }
   stages {
     stage('Build') {
       steps {
