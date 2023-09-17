@@ -13,7 +13,7 @@ pipeline {
     }
     stage('Run Docker image') {
           steps {
-            sh 'docker run -p 8888:8080 skymapled/simple-spring:${BUILD_NUMBER} --name test'
+            sh 'docker run --name test -p 8888:8080 skymapled/simple-spring:${BUILD_NUMBER}'
           }
         }
     stage('Test') {
