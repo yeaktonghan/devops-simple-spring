@@ -13,12 +13,12 @@ pipeline {
     }
     stage('Run Docker image') {
           steps {
-            sh 'docker run --name test -p 8888:8080 skymapled/simple-spring:${BUILD_NUMBER}'
+            sh 'docker run --name test -d -p 8888:8080 skymapled/simple-spring:${BUILD_NUMBER}'
           }
         }
     stage('Test') {
       steps {
-        sh 'curl http://localhost:8888/swagger-ui/index.html'
+        sh 'curl http://127.0.0.1:8888/swagger-ui/index.html'
       }
     }
     stage('Stop Docker container') {
