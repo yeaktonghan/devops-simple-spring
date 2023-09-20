@@ -1,0 +1,46 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+
+      - name: Build Maven project
+        uses: maven/maven@v3
+        with:
+          goals: clean package
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          registry: docker.hub
+          repository: my-app
+          tag: latest
+
+  push:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          registry: docker.hub
+          repository: my-app
+          tag: latest
