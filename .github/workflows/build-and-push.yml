@@ -3,10 +3,15 @@ name: CI/CD
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest, windows-latest, macOs-latest]
 
     steps:
       - name: Checkout code
@@ -15,21 +20,21 @@ jobs:
       - name: Set up Maven
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
 
       - name: Build Maven project
         uses: maven/maven@v3
         with:
           goals: clean package
 
-      - name: Build Docker image
-        uses: docker/build-push-action@v3
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-          registry: docker.hub
-          repository: my-app
-          tag: latest
+      # - name: Build Docker image
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #     password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      #     registry: docker.hub
+      #     repository: my-app
+      #     tag: latest
 
   push:
     needs: build
@@ -42,5 +47,5 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
           registry: docker.hub
-          repository: my-app
+          repository: skymapled/simple-spring
           tag: latest
