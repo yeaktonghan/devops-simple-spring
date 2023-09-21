@@ -23,10 +23,10 @@ jobs:
         with:
           java-version: 17
 
-      - name: Build Maven project
-        uses: maven/maven@v3
-        with:
-          goals: clean package
+      # - name: Build Maven project
+      #   uses: maven/maven@v3
+      #   with:
+      #     goals: clean package
 
       # - name: Build Docker image
       #   uses: docker/build-push-action@v3
