@@ -25,20 +25,30 @@ jobs:
 
       - name: Build Maven project
         run: mvn clean package
-  build_and_push:
-    needs: build
-    name: Build & Push to DockerHub
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-      name: Check out code
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        name: Build & push Docker image
+        with:
+          image: skymapled/simple-spring
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        
+  # build_and_push:
+  #   needs: build
+  #   name: Build & Push to DockerHub
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #     name: Check out code
   
-    - uses: mr-smithers-excellent/docker-build-push@v6
-      name: Build & push Docker image
-      with:
-        image: skymapled/simple-spring
-        tags: latest
-        registry: docker.io
-        dockerfile: Dockerfile
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  #   - uses: mr-smithers-excellent/docker-build-push@v6
+  #     name: Build & push Docker image
+  #     with:
+  #       image: skymapled/simple-spring
+  #       tags: latest
+  #       registry: docker.io
+  #       dockerfile: Dockerfile
+  #       username: ${{ secrets.DOCKER_HUB_USERNAME }}
+  #       password: ${{ secrets.DOCKER_HUB_PASSWORD }}
